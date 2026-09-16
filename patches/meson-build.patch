@@ -1,0 +1,46 @@
+diff --git a/meson.build b/meson.build
+old mode 100644
+new mode 100755
+index b0d9f63..b301fac
+--- a/meson.build
++++ b/meson.build
+@@ -52,7 +52,11 @@ else
+     language : 'c',
+   )
+ endif
+-
++add_project_link_arguments(
++  '-lzoslib',
++  '-lstdc++',
++  language: 'c'
++  )
+ fuzzing = get_option('fuzzing')
+
+ if host_machine.system() != 'windows' and cc.get_id() == 'clang' and fuzzing
+@@ -205,8 +209,6 @@ libpkgconf = library('pkgconf',
+   libpkgconf_sources,
+   c_args: ['-DLIBPKGCONF_EXPORT', build_static],
+   install : true,
+-  version : '8.0.0',
+-  soversion : '8',
+ )
+
+ # For other projects using libpkgconfig as a subproject
+@@ -377,7 +379,7 @@ if build_oom_tests
+   # allocations.  With a static libpkgconf its allocations are wrapped too,
+   # invalidating the test's expectation that every injected failure makes the
+   # spdxtool operation fail.
+-  if libtype != 'static'
++  #if libtype != 'static'
+     test_api_oom_spdxtool_exe = executable('test-api-oom-spdxtool',
+       'tests/api/test-oom-spdxtool.c',
+       'fuzzer/alloc-inject.c',
+@@ -394,7 +396,7 @@ if build_oom_tests
+       install : false,
+       build_by_default : false)
+     test('api-oom-spdxtool', test_api_oom_spdxtool_exe)
+-  endif
++  #endif
+
+   # Replay the existing parser/solver fuzz targets over their seed corpus,
+   # deterministically and without libFuzzer, so the libpkgconf OOM paths they

@@ -1,0 +1,124 @@
+# bump: pkgconf-version /PKGCONF_VERSION="(.*)"/ https://github.com/pkgconf/pkgconf.git|semver:*
+PKGCONF_VERSION="3.0.7"
+
+###
+### Build control file for the pkgconf port
+###
+
+###
+### Required Environment Variables
+###
+export ZOPEN_PROJECT_NAME="pkgconf"
+export ZOPEN_BUILD_LINE="STABLE"
+export ZOPEN_STABLE_URL="https://github.com/pkgconf/pkgconf.git"
+export ZOPEN_STABLE_TAG="pkgconf-${PKGCONF_VERSION}"
+export ZOPEN_STABLE_DEPS="check_clang meson"
+export ZOPEN_DEV_URL=""
+export ZOPEN_DEV_DEPS="meson"
+export ZOPEN_CATEGORIES="development build_system core utilities library"
+export ZOPEN_RUNTIME_DEPS=""
+# export ZOPEN_SYSTEM_PREREQ="zos25" # optional system pre-req (default=zos25)
+
+# Redefine EXIT_FAILURE to 1 (POSIX convention) — on z/OS the system
+# header defines it as 8, which breaks all tests that expect exit code 1.
+export ZOPEN_EXTRA_CPPFLAGS="${ZOPEN_EXTRA_CPPFLAGS} -include ${ZOPEN_ROOT}/patches/zos-compat.h"
+
+
+###
+### Build settings (Port type: BUILD, Build system: Meson)
+###
+### Settings for Meson build system
+export ZOPEN_CONFIGURE="meson"
+export ZOPEN_CONFIGURE_OPTS="setup build --prefix=\${ZOPEN_INSTALL_DIR}"
+export ZOPEN_MAKE="ninja"
+export ZOPEN_MAKE_OPTS="-C build"
+export ZOPEN_CHECK="meson"
+export ZOPEN_CHECK_OPTS="test -C build"
+export ZOPEN_INSTALL="meson"
+export ZOPEN_INSTALL_OPTS="install -C build"
+export ZOPEN_CONFIGURE_MINIMAL="y"
+export ZOPEN_MAKE_MINIMAL="y"
+export ZOPEN_CHECK_MINIMAL="y"
+export ZOPEN_INSTALL_MINIMAL="y"
+
+###
+### Required user-supplied functions
+###
+
+zopen_check_results() {
+  dir="$1"
+  pfx="$2"
+  chk="$1/$2_check.log"
+  # Add logic to extract the test results here:
+  echo "actualFailures:0"
+  echo "totalTests:1"
+  echo "expectedFailures:0"
+  echo "expectedTotalTests:1"
+}
+
+zopen_get_version() {
+  echo "1.0.0" # Modify to echo the version of your tool/library
+}
+
+###
+### Custom Build Logic (if applicable)
+###
+
+
+###
+### Optional User-Supplied Hooks (uncomment to use)
+###
+
+#zopen_append_to_env() {
+#  ## This function runs as part of generation of the .env file. The output of the
+#  ## function is appended to .env.
+#}
+#
+#zopen_append_to_setup(){
+#  ## This function runs as part of generation of the setup.sh file. The output of
+#  ## the function is appended to setup.sh.
+#}
+#
+#zopen_append_to_validate_install(){
+#  ## This function runs as part of generation of the install_test.sh file. The
+#  ## output of the function is appended to install_test.sh script.
+#}
+#
+#zopen_install_caveats(){
+#  ## This function is run post install. All stdout messages are captured and
+#  ## added to the metadata.json as installation caveats.
+#}
+#
+#zopen_init(){
+#  ## This function runs after code is downloaded and patched but before the code
+#  ## is built.
+#}
+#
+#zopen_post_buildenv(){
+#  ## This function runs after the 'buildenv' is processed.
+#}
+#
+#zopen_pre_build(){
+#  ## This function runs before the 'make' step of the build is run.
+#}
+#
+#zopen_pre_check(){
+#  ## This function runs before the 'check' step of the build is run.
+#}
+#
+#zopen_pre_configure(){
+#  ## This function runs before the 'configure' step of the build is run.
+#}
+#
+#
+#zopen_post_install(){
+#  ## This function runs after the 'install' step of the build is run.
+#}
+#
+#zopen_pre_patch(){
+#  ## This function runs before the 'patch' step of the build is run.
+#}
+#
+#zopen_pre_terminate(){
+#  ## This function runs before 'zopen build' terminates.
+#}
