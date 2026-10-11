@@ -1,5 +1,5 @@
 # bump: pkgconf-version /PKGCONF_VERSION="(.*)"/ https://github.com/pkgconf/pkgconf.git|semver:*
-PKGCONF_VERSION="3.0.7"
+PKGCONF_VERSION="3.0.8"
 
 ###
 ### Build control file for the pkgconf port
